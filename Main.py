@@ -18,30 +18,31 @@ obj_snake_player_2 = Snake_2_players(WIDTH*(2/3),(snake_speed,0),dict_button_pla
 
 # Definition of the class of the main window it allows to create button more easily
 class Main_window():
-  def __init__(self,x, y, game_name, game_function, width = 400, height = 200) -> None:
+  def __init__(self,x, y, game_name, game_function, width = 400, height = 200,border_radius = 5) -> None:
     self.x = x
     self.y = y
     self.width = width
     self.height = height
     self.text, self.game_function = game_name, game_function
     self.last_coo_hover = []
+    self.border_radius = border_radius
 
   def draw_button(self):
     button_rect = pygame.Rect(self.x,self.y,self.width,self.height)
-    pygame.draw.rect(screen,color_grey,button_rect,2,5)
+    pygame.draw.rect(screen,color_grey,button_rect,2,self.border_radius)
     text = font_normal_size.render(self.text, True, color_green)
     text_rect = text.get_rect(center=button_rect.center)
     screen.blit(text, text_rect)
 
   def hover_button(self, mouse_coo):
     if self.x <= mouse_coo[0] <= self.x + self.width and self.y <= mouse_coo[1] <= self.y+self.height:
-      pygame.draw.rect(screen,color_white,(self.x,self.y,400,200),2,5)
+      pygame.draw.rect(screen,color_white,(self.x,self.y,400,200),2,self.border_radius)
       pygame.display.update((self.x ,self.y,400,200))
       if [self.x,self.x + self.width,self.y ,self.y +self.height] not in self.last_coo_hover:
         self.last_coo_hover.append([self.x,self.x + self.width,self.y ,self.y +self.height])
     if len(self.last_coo_hover) > 0:
       if (self.last_coo_hover[0][0] > mouse_coo[0] or self.last_coo_hover[0][2] > mouse_coo[1]) or (self.last_coo_hover[0][1] < mouse_coo[0] or self.last_coo_hover[0][3] < mouse_coo[1]):
-        pygame.draw.rect(screen,color_grey,(self.last_coo_hover[0][0] ,self.last_coo_hover[0][2],400,200),2,5)
+        pygame.draw.rect(screen,color_grey,(self.last_coo_hover[0][0] ,self.last_coo_hover[0][2],400,200),2,self.border_radius)
         pygame.display.update((self.last_coo_hover[0][0] ,self.last_coo_hover[0][2],400,200))
         self.last_coo_hover.pop(0)
       return True
@@ -59,6 +60,7 @@ class Main_window():
     
 
 def setting_sound():
+  
   pass
 
 
@@ -266,7 +268,8 @@ button_2_Players = Main_window(760,465,"2 players game mode",Snake_2_players_fun
 lst_object_button = [button_Classic,button_Wall,button_Level,button_2_Players]
 
 button_quit = Main_window(760,425,"Quit",None)
-button_sound = Main_window(100,20,"",setting_sound)
+button_sound = Main_window(20,20,"",setting_sound,200,20,20)
+button_sound.draw_button()
 #------------------------------------------function drawing the main window-----------------------------------------
 def draw_main_window(lst_object):
   title_text = font_high_size.render('SNAKE', True, color_green)
