@@ -124,4 +124,47 @@ class Snake_classic():
       else: 
         return False
       
-      
+def game_over_window(button_retry,button_quit,score1, title_text, score2 = None):
+  surface_game_over = pygame.Surface((WIDTH, HEIGHT),pygame.SRCALPHA)
+  surface_game_over.fill(color_black)
+  alpha_game_over = 0
+  game_over_text = font_high_size.render(title_text, True, color_green)
+  game_over_text_rect = game_over_text.get_rect(center=pygame.Rect(0, 0, WIDTH, HEIGHT-500).center)
+  rect_score1 = pygame.Rect(0,200,WIDTH,200)
+  
+  if type(score2) == int:
+    score_text1 = font_normal_size.render("Player1 scored "+str(score1)+" points", True, color_green)
+    score_text_rect1 = score_text1.get_rect(center=rect_score1.center)
+    rect_score2 = pygame.Rect(0,250,WIDTH,200)
+    score_text2 = font_normal_size.render("Player2 scored "+str(score2)+" points", True, color_green)
+    score_text_rect2 = score_text2.get_rect(center=rect_score2.center)
+  else:
+    score_text1 = font_normal_size.render("You scored "+str(score1)+" points", True, color_green)
+    score_text_rect1 = score_text1.get_rect(center=rect_score1.center)
+
+  while alpha_game_over <= 15:
+    button_retry.draw_button()
+    button_quit.draw_button()
+    screen.blit(game_over_text, game_over_text_rect)
+    screen.blit(score_text1, score_text_rect1)
+    if type(score2) == int:
+      screen.blit(score_text2, score_text_rect2)
+    surface_game_over.set_alpha(alpha_game_over)
+    screen.blit(surface_game_over,(0,0))
+    pygame.display.flip()
+    alpha_game_over+=0.1
+    
+  lst_button = [button_retry,button_quit]
+  running = True
+
+  while running:
+    mouse = pygame.mouse.get_pos()
+    for event in pygame.event.get():
+      if event.type == pygame.QUIT:
+        running = False
+      for button in lst_button:
+        if button.hover_button(mouse) == True:
+          if button.click_button() == True:
+            return
+          else:
+            continue

@@ -4,7 +4,7 @@ from random import *
 from time import * 
 
 from Variable import *
-from Snake_classic import Snake_classic
+from Snake_classic import Snake_classic, game_over_window
 from Snake_wall import Snake_wall
 from Snake_level import Snake_level
 from Snake_2_players import Snake_2_players
@@ -56,53 +56,10 @@ class Main_window():
         return True
     else:
       return False
-
-
-def game_over_window(button_retry,score1, title_text, score2 = None):
-  surface_game_over = pygame.Surface((WIDTH, HEIGHT),pygame.SRCALPHA)
-  surface_game_over.fill(color_black)
-  alpha_game_over = 0
-  game_over_text = font_high_size.render(title_text, True, color_green)
-  game_over_text_rect = game_over_text.get_rect(center=pygame.Rect(0, 0, WIDTH, HEIGHT-500).center)
-  rect_score1 = pygame.Rect(0,200,WIDTH,200)
-  
-  if type(score2) == int:
-    score_text1 = font_normal_size.render("Player1 scored "+str(score1)+" points", True, color_green)
-    score_text_rect1 = score_text1.get_rect(center=rect_score1.center)
-    rect_score2 = pygame.Rect(0,250,WIDTH,200)
-    score_text2 = font_normal_size.render("Player2 scored "+str(score2)+" points", True, color_green)
-    score_text_rect2 = score_text2.get_rect(center=rect_score2.center)
-  else:
-    score_text1 = font_normal_size.render("You scored "+str(score1)+" points", True, color_green)
-    score_text_rect1 = score_text1.get_rect(center=rect_score1.center)
-
-  while alpha_game_over <= 15:
-    button_retry.draw_button()
-    button_quit.draw_button()
-    screen.blit(game_over_text, game_over_text_rect)
-    screen.blit(score_text1, score_text_rect1)
-    if type(score2) == int:
-      screen.blit(score_text2, score_text_rect2)
-    surface_game_over.set_alpha(alpha_game_over)
-    screen.blit(surface_game_over,(0,0))
-    pygame.display.flip()
-    alpha_game_over+=0.1
     
-  lst_button = [button_retry,button_quit]
-  running = True
 
-  while running:
-    mouse = pygame.mouse.get_pos()
-    for event in pygame.event.get():
-      if event.type == pygame.QUIT:
-        running = False
-      for button in lst_button:
-        if button.hover_button(mouse) == True:
-          if button.click_button() == True:
-            return
-          else:
-            continue
-          
+def setting_sound():
+  pass
 
 
 #------------------------------------function Game mode with the classic snake-------------------------------------
@@ -134,7 +91,7 @@ def Snake_classic_function():
       obj_snake_classic.running = False
 
   button_retry = Main_window(320,425,"Retry",Snake_classic_function)
-  game_over_window(button_retry,obj_snake_classic.score,"GAME OVER")
+  game_over_window(button_retry,button_quit,obj_snake_classic.score,"GAME OVER")
 
   screen.fill(color_black)
   draw_main_window(lst_object_button)
@@ -172,7 +129,7 @@ def Snake_wall_function():
       obj_snake_wall.running = False
 
   button_retry = Main_window(320,425,"Retry",Snake_wall_function)
-  game_over_window(button_retry,obj_snake_wall.score,"GAME OVER")
+  game_over_window(button_retry,button_quit,obj_snake_wall.score,"GAME OVER")
 
   screen.fill(color_black)
   draw_main_window(lst_object_button)
@@ -241,7 +198,7 @@ def Snake_level_function():
   obj_snake_level.score_total += obj_snake_level.score
   button_retry = Main_window(320,425,"Retry",Snake_level_function)
   if  obj_snake_level.num_level < 3 or obj_snake_level.food_level_eaten < 11:
-    game_over_window(button_retry,obj_snake_level.score_total,"GAME OVER")
+    game_over_window(button_retry,button_quit,obj_snake_level.score_total,"GAME OVER")
   else:
     game_over_window(button_retry,obj_snake_level.score_total,"YOU WIN")
 
@@ -289,9 +246,9 @@ def Snake_2_players_function():
 
   button_retry = Main_window(320,425,"Retry",Snake_2_players_function)
   if obj_snake_player_1.running == False:
-    game_over_window(button_retry,obj_snake_player_1.score,"PLAYER 2 WIN",obj_snake_player_2.score)
+    game_over_window(button_retry,button_quit,obj_snake_player_1.score,"PLAYER 2 WIN",obj_snake_player_2.score)
   elif obj_snake_player_2.running == False:
-    game_over_window(button_retry,obj_snake_player_1.score,"PLAYER 1 WIN",obj_snake_player_2.score)
+    game_over_window(button_retry,button_quit,obj_snake_player_1.score,"PLAYER 1 WIN",obj_snake_player_2.score)
 
   screen.fill(color_black)
   draw_main_window(lst_object_button)
@@ -309,7 +266,7 @@ button_2_Players = Main_window(760,465,"2 players game mode",Snake_2_players_fun
 lst_object_button = [button_Classic,button_Wall,button_Level,button_2_Players]
 
 button_quit = Main_window(760,425,"Quit",None)
-
+button_sound = Main_window(100,20,"",setting_sound)
 #------------------------------------------function drawing the main window-----------------------------------------
 def draw_main_window(lst_object):
   title_text = font_high_size.render('SNAKE', True, color_green)
