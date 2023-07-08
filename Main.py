@@ -72,12 +72,17 @@ def setting_sound(event,x_circle,y_circle,sound_bool,soustract_x,radius=10):
       if sound_bool == True:
         mouse = pygame.mouse.get_pos()
         x_circle = mouse[0] - soustract_x
-        if 70 <= x_circle <= 250:
-          pygame.draw.rect(screen,color_black,(button_sound.x+2,button_sound.y+2,button_sound.width-4,button_sound.height-4),0,20)
-          circle((x_circle,y_circle),color_grey)
-          pygame.display.update((60,10,200,20))
+        if x_circle < 70:
+          x_circle = 70
+        elif x_circle > 250:
+          x_circle = 250
+        pygame.draw.rect(screen,color_black,(button_sound.x+2,button_sound.y+2,button_sound.width-4,button_sound.height-4),0,20)
+        circle((x_circle,y_circle),color_grey)
+        game_volume = (x_circle-70)/18
+        set_volume_function(game_volume)
+        pygame.display.update((60,15,200,20))
 
-  return sound_bool,soustract_x
+  return sound_bool,soustract_x,x_circle
 #------------------------------------function Game mode with the classic snake-------------------------------------
 def Snake_classic_function():
   obj_snake_classic.snake_interface()
@@ -276,7 +281,7 @@ background_theme.play(-1)
 
 def circle(coord,color,radius=10):
   pygame.draw.circle(screen,color,coord,radius)
-(x_circle,y_circle) = (160,20)
+(x_circle,y_circle) = (160,25)
 
 button_Classic = Main_window(320,225,"Classic game mode",Snake_classic_function)
 button_Wall = Main_window(760,225,"Wall game mode",Snake_wall_function)
@@ -286,12 +291,8 @@ button_2_Players = Main_window(760,465,"2 players game mode",Snake_2_players_fun
 lst_object_button = [button_Classic,button_Wall,button_Level,button_2_Players]
 
 button_quit = Main_window(760,425,"Quit",None)
-button_sound = Main_window(60,10,"",setting_sound,200,20,20)
-button_sound.draw_button()
-circle((x_circle,y_circle),color_grey)
 
-pygame.draw.circle(screen,color_grey,(27,25),20)
-screen.blit(image_volume,(10,10))
+button_sound = Main_window(60,15,"",setting_sound,200,20,20)
 
 #------------------------------------------function drawing the main window-----------------------------------------
 def draw_main_window(lst_object):
@@ -305,6 +306,12 @@ def draw_main_window(lst_object):
   screen.blit(font_normal_size.render('2 players', True, color_green),(870,505))
   screen.blit(font_normal_size.render('game mode', True, color_green),(850,555))
 
+  button_sound.draw_button()
+  circle((game_volume*18+7,y_circle),color_grey)
+
+  pygame.draw.circle(screen,color_grey,(27,25),20)
+  screen.blit(image_volume,(10,10))
+
   pygame.display.update()
 
 # Definition of the frame per second of the game 
@@ -314,17 +321,17 @@ FPS = 50
 pygame.display.update()
 
 #-----------------------------------------------Main loop of the game-----------------------------------------------
-def main_loop(running,lst_object,sound_boolean,soustract_x):
+def main_loop(running,lst_object,sound_boolean,soustract_x,x_circle):
   draw_main_window(lst_object_button)
   while running:
     clock.tick(FPS) 
     mouse = pygame.mouse.get_pos()
     for event in pygame.event.get():
-      sound_boolean, soustract_x = setting_sound(event,x_circle,y_circle,sound_boolean,soustract_x)
+      sound_boolean, soustract_x, x_circle = setting_sound(event,x_circle,y_circle,sound_boolean,soustract_x)
       if event.type == pygame.QUIT:
         running = False
       for object in lst_object:
         if object.hover_button(mouse) == True:
           object.click_button()
 
-main_loop(True,lst_object_button,False,0)
+main_loop(True,lst_object_button,False,0,x_circle)

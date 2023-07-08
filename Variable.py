@@ -23,7 +23,6 @@ image_sound = pygame.image.load('Assets/Images/sound.png')
 image_volume = pygame.image.load('Assets/Images/volume.png')
 
 
-game_volume = 0.2
 
 death_sound_effect = pygame.mixer.Sound('Assets/Sound_effect/Death_sound_effect.wav')
 food_sound_effect = pygame.mixer.Sound('Assets/Sound_effect/Food_sound_effect.wav')
@@ -31,10 +30,13 @@ click_button_sound_effect = pygame.mixer.Sound('Assets/Sound_effect/Click_button
 background_theme = pygame.mixer.Sound('Assets/Sound_effect/Background_theme.wav')
 succes_level_sound_effect =  pygame.mixer.Sound('Assets/Sound_effect/succes_level_sound_effect.wav')
 
-death_sound_effect.set_volume(game_volume)
-food_sound_effect.set_volume(game_volume)
-click_button_sound_effect.set_volume(game_volume)
-background_theme.set_volume(game_volume)
+game_volume = 0.5
+def set_volume_function(volume):
+    death_sound_effect.set_volume(volume)
+    food_sound_effect.set_volume(volume)
+    click_button_sound_effect.set_volume(volume)
+    background_theme.set_volume(volume)
+set_volume_function(game_volume)
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
