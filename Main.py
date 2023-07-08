@@ -69,12 +69,13 @@ def setting_sound(event,x_circle,y_circle,sound_bool,soustract_x,radius=10):
     elif event.type == pygame.MOUSEBUTTONUP:
         sound_bool = False
     elif event.type == pygame.MOUSEMOTION:
-      if sound_bool == True and 70 <= x_circle <= 250:
+      if sound_bool == True:
         mouse = pygame.mouse.get_pos()
         x_circle = mouse[0] - soustract_x
-        pygame.draw.rect(screen,color_black,(button_sound.x+2,button_sound.y+2,button_sound.width-2,button_sound.height-4),0,20)
-        circle((x_circle,y_circle),color_grey)
-        pygame.display.update((60,10,200,20))
+        if 70 <= x_circle <= 250:
+          pygame.draw.rect(screen,color_black,(button_sound.x+2,button_sound.y+2,button_sound.width-4,button_sound.height-4),0,20)
+          circle((x_circle,y_circle),color_grey)
+          pygame.display.update((60,10,200,20))
 
   return sound_bool,soustract_x
 #------------------------------------function Game mode with the classic snake-------------------------------------
