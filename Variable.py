@@ -19,6 +19,10 @@ font_little_size = pygame.font.Font('Assets/Font/Exo-Black.ttf', 32)
 font_normal_size = pygame.font.Font('Assets/Font/Exo-Black.ttf', 40)
 font_high_size = pygame.font.Font('Assets/Font/Exo-Black.ttf', 128)
 
+image_sound = pygame.image.load('Assets/Images/sound.png')
+image_volume = pygame.image.load('Assets/Images/volume.png')
+
+
 game_volume = 0.2
 
 death_sound_effect = pygame.mixer.Sound('Assets/Sound_effect/Death_sound_effect.wav')

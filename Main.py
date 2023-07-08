@@ -30,9 +30,10 @@ class Main_window():
   def draw_button(self):
     button_rect = pygame.Rect(self.x,self.y,self.width,self.height)
     pygame.draw.rect(screen,color_grey,button_rect,2,self.border_radius)
-    text = font_normal_size.render(self.text, True, color_green)
-    text_rect = text.get_rect(center=button_rect.center)
-    screen.blit(text, text_rect)
+    if self.text != "":
+      text = font_normal_size.render(self.text, True, color_green)
+      text_rect = text.get_rect(center=button_rect.center)
+      screen.blit(text, text_rect)
 
   def hover_button(self, mouse_coo):
     if self.x <= mouse_coo[0] <= self.x + self.width and self.y <= mouse_coo[1] <= self.y+self.height:
@@ -58,11 +59,23 @@ class Main_window():
     else:
       return False
     
-
-def setting_sound():
-  
-  pass
-
+sound_button = False
+def setting_sound(event,button):
+  mouse = pygame.mouse.get_pos()
+  if event.type == pygame.MOUSEBUTTONDOWN:
+    distance = ((button.x - mouse[0]) ** 2 + (button.y - mouse[1]) ** 2) ** 0.5
+    if distance <= button.width/2:
+      sound_button = True
+      soustract_x = mouse[0] - button.x
+    elif event.type == pygame.MOUSEBUTTONUP:
+      if event.type == 1:
+          sound_button = False
+    elif event.type == pygame.MOUSEMOTION:
+      if sound_button:
+        mouse = pygame.mouse.get_pos()
+        button.x = mouse[0] - soustract_x
+  button.draw_button()
+  pygame.display.update((0,0,200,50))
 
 #------------------------------------function Game mode with the classic snake-------------------------------------
 def Snake_classic_function():
@@ -268,8 +281,12 @@ button_2_Players = Main_window(760,465,"2 players game mode",Snake_2_players_fun
 lst_object_button = [button_Classic,button_Wall,button_Level,button_2_Players]
 
 button_quit = Main_window(760,425,"Quit",None)
-button_sound = Main_window(20,20,"",setting_sound,200,20,20)
+button_sound = Main_window(60,10,"",setting_sound,200,20,20)
 button_sound.draw_button()
+pygame.draw.circle(screen,color_grey,(27,25),20)
+screen.blit(image_volume,(10,10))
+
+
 #------------------------------------------function drawing the main window-----------------------------------------
 def draw_main_window(lst_object):
   title_text = font_high_size.render('SNAKE', True, color_green)
@@ -297,6 +314,7 @@ def main_loop(running,lst_object):
     clock.tick(FPS) 
     mouse = pygame.mouse.get_pos()
     for event in pygame.event.get():
+      setting_sound(event,button_sound)
       if event.type == pygame.QUIT:
         running = False
       for object in lst_object:
