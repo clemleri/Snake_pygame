@@ -86,6 +86,7 @@ def setting_sound(event,x_circle,y_circle,sound_bool,soustract_x,radius=10):
     pygame.display.update((60,15,200,20))
 
   return sound_bool,soustract_x,x_circle
+
 #------------------------------------function Game mode with the classic snake-------------------------------------
 def Snake_classic_function():
   obj_snake_classic.snake_interface()
@@ -122,6 +123,7 @@ def Snake_classic_function():
 
   sleep(0.1)
   return
+
 #-------------------------------------------function Game mode with wall-------------------------------------------
 def Snake_wall_function():
   obj_snake_wall.snake_interface()
@@ -160,6 +162,7 @@ def Snake_wall_function():
 
   sleep(0.1)
   return
+
 #------------------------------------------function Game mode with level--------------------------------------------
 def Snake_level_function():
   obj_snake_level.snake_surface.fill(color_black)
@@ -279,6 +282,7 @@ def Snake_2_players_function():
 
   sleep(0.1)
   return 
+
 
 background_theme.play(-1)
 
