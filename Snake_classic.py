@@ -164,7 +164,8 @@ def game_over_window(button_retry,button_quit,score1, title_text, score2 = None)
         running = False
       for button in lst_button:
         if button.hover_button(mouse) == True:
-          if button.click_button() == True:
+          if button.click_button(event) == True:
+            running = False
             return
           else:
             continue

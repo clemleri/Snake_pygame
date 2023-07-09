@@ -15,13 +15,14 @@ color_green = (0,255,0)
 color_grey_mid = (20,20,20)
 color_grey = (60,60,60)
 
+
 font_little_size = pygame.font.Font('Assets/Font/Exo-Black.ttf', 32)
 font_normal_size = pygame.font.Font('Assets/Font/Exo-Black.ttf', 40)
 font_high_size = pygame.font.Font('Assets/Font/Exo-Black.ttf', 128)
 
+
 image_sound = pygame.image.load('Assets/Images/sound.png')
 image_volume = pygame.image.load('Assets/Images/volume.png')
-
 
 
 death_sound_effect = pygame.mixer.Sound('Assets/Sound_effect/Death_sound_effect.wav')
@@ -29,6 +30,7 @@ food_sound_effect = pygame.mixer.Sound('Assets/Sound_effect/Food_sound_effect.wa
 click_button_sound_effect = pygame.mixer.Sound('Assets/Sound_effect/Click_button_sound_effect.wav')
 background_theme = pygame.mixer.Sound('Assets/Sound_effect/Background_theme.wav')
 succes_level_sound_effect =  pygame.mixer.Sound('Assets/Sound_effect/succes_level_sound_effect.wav')
+
 
 game_volume = 0.5
 def set_volume_function(volume):
@@ -47,5 +49,3 @@ dict_button_player2 = {pygame.K_q:(-snake_speed,0),pygame.K_d:(snake_speed,0),py
 
 
 pygame.display.set_caption('Snake_game')
-screen.fill(color_black)
-pygame.display.flip()

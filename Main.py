@@ -18,14 +18,16 @@ obj_snake_player_2 = Snake_2_players(WIDTH*(2/3),(snake_speed,0),dict_button_pla
 
 # Definition of the class of the main window it allows to create button more easily
 class Main_window():
-  def __init__(self,x, y, game_name, game_function, width = 400, height = 200,border_radius = 5) -> None:
+  def __init__(self,x, y, game_name, game_function, width = 400, height = 200,border_radius = 5,argument_function=None) -> None:
     self.x = x
     self.y = y
     self.width = width
     self.height = height
     self.text, self.game_function = game_name, game_function
+    self.argument_funtion = argument_function
     self.last_coo_hover = []
     self.border_radius = border_radius
+    self.mouse_press = False 
 
   def draw_button(self):
     button_rect = pygame.Rect(self.x,self.y,self.width,self.height)
@@ -48,16 +50,23 @@ class Main_window():
         self.last_coo_hover.pop(0)
       return True
     
-  def click_button(self):
-    if pygame.mouse.get_pressed()[0] == 1:
+  def click_button(self,event):
+    if event.type == pygame.MOUSEBUTTONDOWN and self.mouse_press == False:
       click_button_sound_effect.play()
       screen.fill(color_grey_mid)
-      if callable(self.game_function) == True:
-        self.game_function()
+      if self.argument_funtion != None:
+        self.game_function(self.argument_funtion)
       else:
-        return True
-    else:
-      return False
+        self.game_function()
+      return True 
+      self.mouse_press = True
+    elif event.type == pygame.MOUSEBUTTONUP:
+      self.mouse_press = False
+      
+    return False
+  
+
+
     
 def setting_sound(event,x_circle,y_circle,sound_bool,soustract_x,radius=10):
   mouse = pygame.mouse.get_pos()
@@ -67,7 +76,10 @@ def setting_sound(event,x_circle,y_circle,sound_bool,soustract_x,radius=10):
       sound_bool = True
       soustract_x = mouse[0] - x_circle
     elif event.type == pygame.MOUSEBUTTONUP:
-        sound_bool = False
+      sound_bool = False
+      game_volume = (x_circle-70)/18
+      set_volume_function(game_volume)
+      click_button_sound_effect.play()
     elif event.type == pygame.MOUSEMOTION:
       if sound_bool == True:
         mouse = pygame.mouse.get_pos()
@@ -78,8 +90,6 @@ def setting_sound(event,x_circle,y_circle,sound_bool,soustract_x,radius=10):
           x_circle = 250
         pygame.draw.rect(screen,color_black,(button_sound.x+2,button_sound.y+2,button_sound.width-4,button_sound.height-4),0,20)
         circle((x_circle,y_circle),color_grey)
-        game_volume = (x_circle-70)/18
-        set_volume_function(game_volume)
         pygame.display.update((60,15,200,20))
   else:
     circle((x_circle,y_circle),color_grey)
@@ -111,20 +121,16 @@ def Snake_classic_function():
 
     obj_snake_classic.move_snake(color_green)
     
-    if obj_snake_classic.snake_collision() == True:
+    if obj_snake_classic.snake_collision() == True: 
       death_sound_effect.play()
       obj_snake_classic.running = False
 
   button_retry = Main_window(320,425,"Retry",Snake_classic_function)
   game_over_window(button_retry,button_quit,obj_snake_classic.score,"GAME OVER")
 
-  screen.fill(color_black)
-  draw_main_window(lst_object_button)
-
-  sleep(0.1)
   return
 
-#-------------------------------------------function Game mode with wall-------------------------------------------
+#-------------------------------------------function Game mode with wall--------------------------------------------
 def Snake_wall_function():
   obj_snake_wall.snake_interface()
   obj_snake_wall.wait_start()
@@ -157,10 +163,6 @@ def Snake_wall_function():
   button_retry = Main_window(320,425,"Retry",Snake_wall_function)
   game_over_window(button_retry,button_quit,obj_snake_wall.score,"GAME OVER")
 
-  screen.fill(color_black)
-  draw_main_window(lst_object_button)
-
-  sleep(0.1)
   return
 
 #------------------------------------------function Game mode with level--------------------------------------------
@@ -227,12 +229,8 @@ def Snake_level_function():
   if  obj_snake_level.num_level < 3 or obj_snake_level.food_level_eaten < 11:
     game_over_window(button_retry,button_quit,obj_snake_level.score_total,"GAME OVER")
   else:
-    game_over_window(button_retry,obj_snake_level.score_total,"YOU WIN")
+    game_over_window(button_retry,button_quit,obj_snake_level.score_total,"YOU WIN")
 
-  screen.fill(color_black)
-  draw_main_window(lst_object_button)
-
-  sleep(0.1)
   return
 
 #-----------------------------------------function Game mode with 2 players-----------------------------------------
@@ -277,10 +275,6 @@ def Snake_2_players_function():
   elif obj_snake_player_2.running == False:
     game_over_window(button_retry,button_quit,obj_snake_player_1.score,"PLAYER 1 WIN",obj_snake_player_2.score)
 
-  screen.fill(color_black)
-  draw_main_window(lst_object_button)
-
-  sleep(0.1)
   return 
 
 
@@ -297,12 +291,11 @@ button_2_Players = Main_window(760,465,"2 players game mode",Snake_2_players_fun
 
 lst_object_button = [button_Classic,button_Wall,button_Level,button_2_Players]
 
-button_quit = Main_window(760,425,"Quit",None)
-
 button_sound = Main_window(60,15,"",setting_sound,200,20,20)
 
 #------------------------------------------function drawing the main window-----------------------------------------
 def draw_main_window(lst_object):
+  screen.fill(color_black)
   title_text = font_high_size.render('SNAKE', True, color_green)
   screen.blit(title_text,(520,50))
 
@@ -319,7 +312,9 @@ def draw_main_window(lst_object):
   pygame.draw.circle(screen,color_grey,(27,25),20)
   screen.blit(image_volume,(10,10))
 
-  pygame.display.update()
+  pygame.display.flip()
+
+button_quit = Main_window(760,425,"Quit",draw_main_window,400,200,5,lst_object_button)
 
 # Definition of the frame per second of the game 
 clock = pygame.time.Clock()
@@ -339,6 +334,6 @@ def main_loop(running,lst_object,sound_boolean,soustract_x,x_circle):
         running = False
       for object in lst_object:
         if object.hover_button(mouse) == True:
-          object.click_button()
+          object.click_button(event)
 
 main_loop(True,lst_object_button,False,0,x_circle)
