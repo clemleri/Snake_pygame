@@ -66,7 +66,6 @@ class Main_window():
     return False
   
 
-
     
 def setting_sound(event,x_circle,y_circle,sound_bool,soustract_x,radius=10):
   mouse = pygame.mouse.get_pos()
@@ -77,7 +76,8 @@ def setting_sound(event,x_circle,y_circle,sound_bool,soustract_x,radius=10):
       soustract_x = mouse[0] - x_circle
     elif event.type == pygame.MOUSEBUTTONUP:
       sound_bool = False
-      game_volume = (x_circle-70)/18
+      game_volume = (x_circle-70)/180
+      print(game_volume)
       set_volume_function(game_volume)
       click_button_sound_effect.play()
     elif event.type == pygame.MOUSEMOTION:
