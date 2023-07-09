@@ -81,6 +81,9 @@ def setting_sound(event,x_circle,y_circle,sound_bool,soustract_x,radius=10):
         game_volume = (x_circle-70)/18
         set_volume_function(game_volume)
         pygame.display.update((60,15,200,20))
+  else:
+    circle((x_circle,y_circle),color_grey)
+    pygame.display.update((60,15,200,20))
 
   return sound_bool,soustract_x,x_circle
 #------------------------------------function Game mode with the classic snake-------------------------------------
