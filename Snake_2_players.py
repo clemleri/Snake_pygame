@@ -18,6 +18,9 @@ class Snake_2_players(Snake_classic):
     def player_colision(self,snake_player):
         if (self.x,self.y) in snake_player:
             return True
+        
+    def food_spawn(self, color_food):
+        return super().food_spawn(color_food)
 
 
 

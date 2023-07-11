@@ -77,7 +77,6 @@ def setting_sound(event,x_circle,y_circle,sound_bool,soustract_x,radius=10):
     elif event.type == pygame.MOUSEBUTTONUP:
       sound_bool = False
       game_volume = (x_circle-70)/180
-      print(game_volume)
       set_volume_function(game_volume)
       click_button_sound_effect.play()
     elif event.type == pygame.MOUSEMOTION:
@@ -240,6 +239,7 @@ def Snake_2_players_function():
 
   obj_snake_player_1.__init__(WIDTH/3,(-snake_speed,0),dict_button)
   obj_snake_player_2.__init__(WIDTH*(2/3),(snake_speed,0),dict_button_player2)
+  obj_snake_classic.__init__()
   pygame.draw.rect(screen, color_yellow, (obj_snake_classic.food_x, obj_snake_classic.food_y, 20, 20))
   pygame.display.flip()
 
