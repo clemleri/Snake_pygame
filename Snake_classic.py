@@ -6,16 +6,16 @@ from time import *
 from Variable import *
 
 class Snake_classic():
-    def __init__(self):
+    def __init__(self,x = WIDTH/2,dict_button = dict_button,tuple_direction = (snake_speed,0)):
       self.name_game_mode = "Classic game mode"
       self.running = True
       self.snake_width, self.snake_height = WIDTH, HEIGHT
       self.snake_surface = pygame.Surface((self.snake_width, self.snake_height))
-      self.x, self.y = self.snake_width/2, self.snake_height/2 
+      self.x, self.y =x, self.snake_height/2 
       self.snake = [(self.x,self.y),(self.x-20,self.y),(self.x-40,self.y)]
       self.tail_snake = (self.x-40.2,self.y)
-      self.dict_button = {pygame.K_LEFT:(-snake_speed,0),pygame.K_RIGHT:(snake_speed,0),pygame.K_UP:(0,-snake_speed),pygame.K_DOWN:(0,snake_speed)}
-      self.tuple_direction = (snake_speed,0)
+      self.dict_button = dict_button
+      self.tuple_direction = tuple_direction
       self.chg_tuple_direction = (snake_speed,0)
       self.verrou_change = False 
       self.food_x, self.food_y = randrange(20,self.snake_width-20,20), randrange(60,self.snake_height-40,20)  

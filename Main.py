@@ -239,7 +239,6 @@ def Snake_2_players_function():
 
   obj_snake_player_1.__init__(WIDTH/3,(-snake_speed,0),dict_button)
   obj_snake_player_2.__init__(WIDTH*(2/3),(snake_speed,0),dict_button_player2)
-  obj_snake_classic.__init__()
   pygame.draw.rect(screen, color_yellow, (obj_snake_classic.food_x, obj_snake_classic.food_y, 20, 20))
   pygame.display.flip()
 
@@ -253,10 +252,13 @@ def Snake_2_players_function():
           obj_snake_player_1.running = False
           return
 
-    if obj_snake_player_1.x == obj_snake_classic.food_x and obj_snake_player_1.y == obj_snake_classic.food_y:
-      obj_snake_player_1.food_spawn(color_yellow)
-    if obj_snake_player_2.x == obj_snake_classic.food_x and obj_snake_player_2.y == obj_snake_classic.food_y:
-      obj_snake_player_2.food_spawn(color_yellow)
+    if obj_snake_player_1.x == obj_snake_player_1.food_x and obj_snake_player_1.y == obj_snake_player_1.food_y:
+      obj_snake_player_1.food_spawn(color_yellow,obj_snake_player_2.snake)
+      obj_snake_player_2.food_x, obj_snake_player_2.food_y = obj_snake_player_1.food_x, obj_snake_player_1.food_y
+    if obj_snake_player_2.x == obj_snake_player_2.food_x and obj_snake_player_2.y == obj_snake_player_2.food_y:
+      obj_snake_player_2.food_spawn(color_yellow,obj_snake_player_1.snake)
+      obj_snake_player_1.food_x, obj_snake_player_1.food_y = obj_snake_player_2.food_x, obj_snake_player_2.food_y
+
 
     obj_snake_player_1.move_snake(color_green)
     obj_snake_player_2.move_snake(color_red)
