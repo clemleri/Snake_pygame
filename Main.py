@@ -66,7 +66,7 @@ class Main_window():
     return False
   
 
-    
+
 def setting_sound(event,x_circle,y_circle,sound_bool,soustract_x,radius=10):
   mouse = pygame.mouse.get_pos()
   distance = ((x_circle - mouse[0]) ** 2 + (y_circle - mouse[1]) ** 2) ** 0.5

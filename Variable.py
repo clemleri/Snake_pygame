@@ -38,6 +38,7 @@ def set_volume_function(volume):
     food_sound_effect.set_volume(volume)
     click_button_sound_effect.set_volume(volume)
     background_theme.set_volume(volume)
+    succes_level_sound_effect.set_volume(volume)
 set_volume_function(game_volume)
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
