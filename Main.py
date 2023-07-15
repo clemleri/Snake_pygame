@@ -12,8 +12,7 @@ from Snake_2_players import Snake_2_players
 obj_snake_classic = Snake_classic()
 obj_snake_wall = Snake_wall()
 obj_snake_level = Snake_level()
-obj_snake_player_1 = Snake_2_players(WIDTH/3,(-snake_speed,0),dict_button)
-obj_snake_player_2 = Snake_2_players(WIDTH*(2/3),(snake_speed,0),dict_button_player2)
+obj_snake_2_players = Snake_2_players()
 
 
 # Definition of the class of the main window it allows to create button more easily
@@ -98,7 +97,7 @@ def setting_sound(event,x_circle,y_circle,sound_bool,soustract_x,radius=10):
 
 #------------------------------------function Game mode with the classic snake-------------------------------------
 def Snake_classic_function():
-  obj_snake_classic.snake_interface()
+  obj_snake_classic.snake_interface('Score: '+str(obj_snake_classic.score))
   obj_snake_classic.wait_start()
 
   obj_snake_classic.__init__()
@@ -131,7 +130,7 @@ def Snake_classic_function():
 
 #-------------------------------------------function Game mode with wall--------------------------------------------
 def Snake_wall_function():
-  obj_snake_wall.snake_interface()
+  obj_snake_wall.snake_interface('Score: '+str(obj_snake_wall.score))
   obj_snake_wall.wait_start()
 
   obj_snake_wall.__init__()
@@ -171,7 +170,7 @@ def Snake_level_function():
     succes_level_sound_effect.play()
     obj_snake_level.load_level()
     obj_snake_level.snake_surface.fill(color_black)
-    obj_snake_level.snake_interface()
+    obj_snake_level.snake_interface('Score: '+str(obj_snake_level.score))
     obj_snake_level.draw_level()
     screen.blit(obj_snake_level.snake_surface,(0,0))
     obj_snake_level.reset()
@@ -180,7 +179,7 @@ def Snake_level_function():
     pygame.display.flip()
 
   obj_snake_level.num_level = 1
-  obj_snake_level.snake_interface()
+  obj_snake_level.snake_interface('Score: '+str(obj_snake_level.score))
   obj_snake_level.draw_level()
   obj_snake_level.wait_start()
 
@@ -234,48 +233,42 @@ def Snake_level_function():
 
 #-----------------------------------------function Game mode with 2 players-----------------------------------------
 def Snake_2_players_function():
-  obj_snake_player_1.snake_interface()
-  obj_snake_player_1.wait_start()
-
-  obj_snake_player_1.__init__(WIDTH/3,(-snake_speed,0),dict_button)
-  obj_snake_player_2.__init__(WIDTH*(2/3),(snake_speed,0),dict_button_player2)
-  pygame.draw.rect(screen, color_yellow, (obj_snake_classic.food_x, obj_snake_classic.food_y, 20, 20))
+  obj_snake_2_players.snake_interface('Scores: '+str(obj_snake_2_players.snake_player_1.score)+' VS '+str(obj_snake_2_players.snake_player_2.score))
+  obj_snake_2_players.wait_start()
+  obj_snake_2_players.__init__()
+  pygame.draw.rect(screen, color_yellow, (obj_snake_2_players.food_x_2s, obj_snake_2_players.food_y_2s, 20, 20))
   pygame.display.flip()
 
-  while obj_snake_player_1.running and obj_snake_player_2.running:
+  while obj_snake_2_players.running and obj_snake_2_players.running:
     clock.tick(FPS) 
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
-        obj_snake_player_1.running = False
+        obj_snake_2_players.running = False
       elif event.type == pygame.KEYDOWN:
         if event.key == pygame.K_ESCAPE:
-          obj_snake_player_1.running = False
+          obj_snake_2_players.running = False
           return
 
-    if obj_snake_player_1.x == obj_snake_player_1.food_x and obj_snake_player_1.y == obj_snake_player_1.food_y:
-      obj_snake_player_1.food_spawn(color_yellow,obj_snake_player_2.snake)
-      obj_snake_player_2.food_x, obj_snake_player_2.food_y = obj_snake_player_1.food_x, obj_snake_player_1.food_y
-    if obj_snake_player_2.x == obj_snake_player_2.food_x and obj_snake_player_2.y == obj_snake_player_2.food_y:
-      obj_snake_player_2.food_spawn(color_yellow,obj_snake_player_1.snake)
-      obj_snake_player_1.food_x, obj_snake_player_1.food_y = obj_snake_player_2.food_x, obj_snake_player_2.food_y
+    if obj_snake_2_players.snake_player_1.x == obj_snake_2_players.food_x_2s and obj_snake_2_players.snake_player_1.y == obj_snake_2_players.food_y_2s:
+      obj_snake_2_players.food_spawn(color_yellow,obj_snake_2_players.snake_player_1,obj_snake_2_players.snake_player_2)
+    if obj_snake_2_players.snake_player_2.x == obj_snake_2_players.food_x_2s and obj_snake_2_players.snake_player_2.y == obj_snake_2_players.food_y_2s:
+      obj_snake_2_players.food_spawn(color_yellow,obj_snake_2_players.snake_player_2,obj_snake_2_players.snake_player_1)
 
-
-    obj_snake_player_1.move_snake(color_green)
-    obj_snake_player_2.move_snake(color_red)
+    obj_snake_2_players.move_snakes()
     
-    if obj_snake_player_1.snake_collision() == True or obj_snake_player_1.player_colision(obj_snake_player_2.snake) == True:
+    if obj_snake_2_players.snake_player_1.snake_collision() == True or obj_snake_2_players.player_colision_1() == True:
       death_sound_effect.play()
-      obj_snake_player_1.running = False
-    if obj_snake_player_2.snake_collision() == True or obj_snake_player_2.player_colision(obj_snake_player_1.snake) == True:
+      obj_snake_2_players.running,obj_snake_2_players.snake_player_1.running = False, False
+    if obj_snake_2_players.snake_player_2.snake_collision() == True or obj_snake_2_players.player_colision_2() == True:
       death_sound_effect.play()
-      obj_snake_player_2.running = False
+      obj_snake_2_players.running,obj_snake_2_players.snake_player_2.running = False, False
 
 
   button_retry = Main_window(320,425,"Retry",Snake_2_players_function)
-  if obj_snake_player_1.running == False:
-    game_over_window(button_retry,button_quit,obj_snake_player_1.score,"PLAYER 2 WIN",obj_snake_player_2.score)
-  elif obj_snake_player_2.running == False:
-    game_over_window(button_retry,button_quit,obj_snake_player_1.score,"PLAYER 1 WIN",obj_snake_player_2.score)
+  if obj_snake_2_players.snake_player_1.running == False:
+    game_over_window(button_retry,button_quit,obj_snake_2_players.snake_player_1.score,"PLAYER 2 WIN",obj_snake_2_players.snake_player_2.score)
+  elif obj_snake_2_players.snake_player_2.running == False:
+    game_over_window(button_retry,button_quit,obj_snake_2_players.score,"PLAYER 1 WIN",obj_snake_2_players.score)
 
   return 
 

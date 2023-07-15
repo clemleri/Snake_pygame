@@ -22,7 +22,7 @@ class Snake_classic():
       self.score = 0
       self.bool_damier = False
       
-    def snake_interface(self):
+    def snake_interface(self,score):
 
       boolean_damier = False 
 
@@ -39,7 +39,7 @@ class Snake_classic():
             pygame.draw.rect(self.snake_surface,color_grey,(i,y,20,20))
           boolean_damier = not boolean_damier
           
-      score_text = font_little_size.render('Score: 0', True, color_yellow)
+      score_text = font_little_size.render(score, True, color_yellow)
       self.snake_surface.blit(score_text,(20,20))
       pygame.draw.rect(self.snake_surface,color_green,(18,58,self.snake_width-36,self.snake_height-96),2,7)
       pygame.display.flip()
